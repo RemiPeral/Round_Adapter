@@ -32,7 +32,7 @@ class Information(Frame):
         #Récupère la feuille Excel de la tournée et la convertit en CSV
         xls = pd.ExcelFile(self.fname)
         df = xls.parse('Feuil1', index_col= None, na_values=['NA'])
-        df.to_csv('leCsv.csv', index = False, index_label= False, header= False)
+        df.to_csv('csvTemporaire.csv', index = False, index_label= False, header= False)
    
         self.champInformations = Label(self, text = "Veuillez selectionner le cabinet concerne : ")
         self.champInformations.pack()
@@ -42,7 +42,7 @@ class Information(Frame):
         
         self.lEtablishment = Listbox(self, width = 30)
     
-        with open('leCsv.csv', newline='', encoding="utf8", errors='ignore') as csvfile:
+        with open('csvTemporaire.csv', newline='', encoding="utf8", errors='ignore') as csvfile:
             
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             self.leDepartement = 0;
@@ -105,7 +105,7 @@ class Information(Frame):
         
     def envoyer(self):
        
-        with open('leCsv.csv', newline='', encoding="utf8", errors='ignore') as csvfile:
+        with open('csvTemporaire.csv', newline='', encoding="utf8", errors='ignore') as csvfile:
             
             #Ce bout de code permet de déterminer le nombre de lignes du Csv généré à partir de la liste des tournées       
             limite = 0
@@ -117,7 +117,7 @@ class Information(Frame):
                 buf = read_f(buf_size)
             csvfile.close()
             
-            with open('leCsv.csv', newline='', encoding="utf8", errors='ignore') as csvfile:
+            with open('csvTemporaire.csv', newline='', encoding="utf8", errors='ignore') as csvfile:
                 
                 reader = csv.reader(csvfile, delimiter=',', quotechar='|')
                 writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -235,6 +235,6 @@ class Information(Frame):
                 self.champInformations["text"] = "Votre fichier script " + nomFichier + " est disponible a l'adresse " + self.leDossier
                 
                 fichierRequete.close()
-                
-                print(requeteSQL)
+                csvfile.close()
+                os.remove("csvTemporaire.csv")
         
